@@ -7,8 +7,8 @@
 
 《前端架构实战》  提纲
 
-1、前端打包与自动化(webpack、gulp)
-2、分支管理策略(git)
+##1、前端打包与自动化(webpack、gulp)
+##2、分支管理策略(git)
 
 3、react原理与ES6
 4、用react写组件
