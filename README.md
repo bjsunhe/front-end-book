@@ -6,11 +6,18 @@
 
 
 《前端架构实战》  提纲
-###主题   实战中的前端架构问题，对主流框架的分析和应用
+###主题   实战中的前端架构问题，对主流框架的分析和应用,配合代码实例讲解
 
 ###参考资料  http://reactivex.io/learnrx/
 ###参考资料  https://github.com/hemanth/functional-programming-jargon
 ###参考资料  https://egghead.io/courses/introduction-to-reactive-programming
+###参考资料  https://webpack.js.org/get-started/
+###参考资料  https://babeljs.io/
+
+
+
+
+
 
 
 ##1、前端打包与自动化(webpack、gulp)
