@@ -6,6 +6,12 @@
 
 
 《前端架构实战》  提纲
+###主题   实战中的前端架构问题，对主流框架的分析和应用
+
+###参考资料  http://reactivex.io/learnrx/
+###参考资料  https://github.com/hemanth/functional-programming-jargon
+###参考资料  https://egghead.io/courses/introduction-to-reactive-programming
+
 
 ##1、前端打包与自动化(webpack、gulp)
 ##2、分支管理策略(git)
@@ -21,7 +27,7 @@
 ##8、用react与redux构建 react native 应用
 
 
-##9、函数式编程
+##9、函数式编程初探
 ##10、一种新的数据流管理架构思路meng.js
 ##11、用meng.js构建实战项目
 
