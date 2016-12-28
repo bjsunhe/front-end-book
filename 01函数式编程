@@ -1,0 +1,404 @@
+Functional programming provides developers with the tools to abstract common collection operations into reusable, composable building blocks.
+函数式编程为开发者提供了一套工具，通过这种工具，开发者可以将通用的集合操作抽象出来，形成可重用、可组装的代码块。
+
+
+You'll be surprised to learn that most of the operations you perform on collections can be accomplished with five simple functions.
+你会惊奇地发现，你对集合的大部分操作都可以用5个简单的函数完成。
+
+map
+filter
+concatAll
+reduce
+zip
+
+
+ if you learn these 5 functions your code will become shorter, more self-descriptive, and more durable. 
+ 如果你学会了这5种函数，你的代码将会更简洁、更易懂、更持久耐用。
+
+
+
+ you'll learn that these five functions hold the key to simplifying asynchronous programming. 
+ 你会发现，这5个函数是简化异步编程的关键。
+
+
+ Once you've finished this tutorial you'll also have all the tools you need to easily avoid race conditions, propagate and handle asynchronous errors, and sequence events and AJAX requests.
+ 学完本课，你会拥有全部的工具，用以轻松避免资源抢夺、传递和处理异步错误、事件排序和AJAX请求。
+
+ In short, these 5 functions will probably be the most powerful, flexible, and useful functions you'll ever learn.
+ 一句话，这5个函数将会是你学过的最强大、最灵活、最有用的函数。
+
+
+
+ The Array is Javascript's only collection type. 
+ 数组是js的唯一集合类型。
+
+ We're going to add the five functions to the Array type, and in the process make it much more powerful and useful.
+ 我们将把这5种函数添加到数组类型中，在这一过程中，让数组更强大和有用。
+
+ As a matter of fact, Array already has the map, filter, and reduce functions! 
+ 事实上，数组已经有 map, filter, reduce 函数了。
+
+
+ Once we've learned the five functions, you'll learn how to combine them to solve complex problems with very little code. 
+ 学会这5个函数后，你会学会通过这几个方法的组合，可以用很少的代码解决复杂的问题。
+
+
+function(console) {
+	var names = ["Ben", "Jafar", "Matt", "Priya", "Brian"],
+		counter;
+
+	for(counter = 0; counter < names.length; counter++) {
+		console.log(names[counter]);
+	}
+}
+		
+
+function(console) {
+	var names = ["Ben", "Jafar", "Matt", "Priya", "Brian"];
+
+	names.forEach(function(name) {
+		console.log(name);
+	});
+}
+    
+
+
+
+Applying a function to a value and creating a new value is called a projection.
+在一个值上执行一个函数，产生一个新的值，这一过程叫做映射。
+
+ To project one array into another, we apply a projection function to each item in the array and collect the results in a new array.
+把一个数组映射成另一个数组，我们对数组中的每一个元素执行映射函数，然后用一个新的数组盛放结果。
+
+
+
+function() {
+	var newReleases = [
+			{
+				"id": 70111470,
+				"title": "Die Hard",
+				"boxart": "http://cdn-0.nflximg.com/images/2891/DieHard.jpg",
+				"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+				"rating": [4.0],
+				"bookmark": []
+			},
+			{
+				"id": 654356453,
+				"title": "Bad Boys",
+				"boxart": "http://cdn-0.nflximg.com/images/2891/BadBoys.jpg",
+				"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+				"rating": [5.0],
+				"bookmark": [{ id: 432534, time: 65876586 }]
+			},
+			{
+				"id": 65432445,
+				"title": "The Chamber",
+				"boxart": "http://cdn-0.nflximg.com/images/2891/TheChamber.jpg",
+				"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+				"rating": [4.0],
+				"bookmark": []
+			},
+			{
+				"id": 675465,
+				"title": "Fracture",
+				"boxart": "http://cdn-0.nflximg.com/images/2891/Fracture.jpg",
+				"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+				"rating": [5.0],
+				"bookmark": [{ id: 432534, time: 65876586 }]
+			}
+		],
+		videoAndTitlePairs = [];
+
+	newReleases.forEach(function(video) {
+		videoAndTitlePairs.push({ id: video.id, title: video.title });
+	});
+
+	return videoAndTitlePairs;
+}
+
+
+
+
+All array projections share two operations in common:
+
+Traverse the source array
+Add each item's projected value to a new array
+Why not abstract away how these operations are carried out?
+
+所有的数组映射都有两个相同的操作：
+遍历源数组；
+将每个元素映射后的值添加到新的数组；
+为什么不把这些操作抽象出来呢？
+
+
+Map accepts the projection function to be applied to each item in the source array, and returns the projected array.
+Map函数接收映射函数，返回映射后的数组。
+
+Array.prototype.map = function(projectionFunction) {
+	var results = [];
+	this.forEach(function(itemInArray) {
+		results.push(projectionFunction(itemInArray));
+
+	});
+
+	return results;
+};
+
+
+// JSON.stringify([1,2,3].map(function(x) { return x + 1; })) === '[2,3,4]'
+
+
+
+
+function() {
+	var newReleases = [
+			{
+				"id": 70111470,
+				"title": "Die Hard",
+				"boxart": "http://cdn-0.nflximg.com/images/2891/DieHard.jpg",
+				"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+				"rating": [4.0],
+				"bookmark": []
+			},
+			{
+				"id": 654356453,
+				"title": "Bad Boys",
+				"boxart": "http://cdn-0.nflximg.com/images/2891/BadBoys.jpg",
+				"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+				"rating": [5.0],
+				"bookmark": [{ id: 432534, time: 65876586 }]
+			},
+			{
+				"id": 65432445,
+				"title": "The Chamber",
+				"boxart": "http://cdn-0.nflximg.com/images/2891/TheChamber.jpg",
+				"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+				"rating": [4.0],
+				"bookmark": []
+			},
+			{
+				"id": 675465,
+				"title": "Fracture",
+				"boxart": "http://cdn-0.nflximg.com/images/2891/Fracture.jpg",
+				"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+				"rating": [5.0],
+				"bookmark": [{ id: 432534, time: 65876586 }]
+			}
+		];
+
+  	return newReleases.map(function(video) { return { id: video.id, title: video.title }; });
+}
+
+
+ To filter an array we apply a test to each item in the array and collect the items that pass into a new array.
+
+ 为了过滤一个数组，我们对数组中的每个元素执行一个测试，然后用一个新的数组收集通过测试的元素。
+
+
+
+ function() {
+	var newReleases = [
+			{
+				"id": 70111470,
+				"title": "Die Hard",
+				"boxart": "http://cdn-0.nflximg.com/images/2891/DieHard.jpg",
+				"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+				"rating": 4.0,
+				"bookmark": []
+			},
+			{
+				"id": 654356453,
+				"title": "Bad Boys",
+				"boxart": "http://cdn-0.nflximg.com/images/2891/BadBoys.jpg",
+				"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+				"rating": 5.0,
+				"bookmark": [{ id: 432534, time: 65876586 }]
+			},
+			{
+				"id": 65432445,
+				"title": "The Chamber",
+				"boxart": "http://cdn-0.nflximg.com/images/2891/TheChamber.jpg",
+				"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+				"rating": 4.0,
+				"bookmark": []
+			},
+			{
+				"id": 675465,
+				"title": "Fracture",
+				"boxart": "http://cdn-0.nflximg.com/images/2891/Fracture.jpg",
+				"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+				"rating": 5.0,
+				"bookmark": [{ id: 432534, time: 65876586 }]
+			}
+		],
+		videos = [];
+
+	newReleases.forEach(function(video) {
+		if (video.rating === 5.0) {
+			videos.push(video);
+		}
+	});
+
+	return videos;
+}
+		
+every filter() operation shares some operations in common:
+
+Traverse the array
+Add objects that pass the test to a new array
+Why not abstract away how these operations are carried out?
+
+每一个filter()操作也都有共同的特点，
+遍历数组； 
+将通过测试的对象添加到新数组；
+为什么不把这些操作抽象出来呢？
+
+ The filter() function accepts a predicate. A predicate is a function that accepts an item in the array, and returns a boolean indicating whether the item should be retained in the new array.
+
+ filter()函数接收一个判断。判断是一个函数，接收数组中的一个元素，返回一个布尔值，这个布尔值标志着该元素是否应该在新数组中被保留。
+
+
+ Array.prototype.filter = function(predicateFunction) {
+	var results = [];
+	this.forEach(function(itemInArray) {
+	  if (predicateFunction(itemInArray)) {
+		results.push(itemInArray);
+	  }
+	});
+
+	return results;
+};
+
+// JSON.stringify([1,2,3].filter(function(x) { return x > 2})) === "[3]"		
+
+
+
+链式调用
+function() {
+	var newReleases = [
+			{
+				"id": 70111470,
+				"title": "Die Hard",
+				"boxart": "http://cdn-0.nflximg.com/images/2891/DieHard.jpg",
+				"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+				"rating": 4.0,
+				"bookmark": []
+			},
+			{
+				"id": 654356453,
+				"title": "Bad Boys",
+				"boxart": "http://cdn-0.nflximg.com/images/2891/BadBoys.jpg",
+				"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+				"rating": 5.0,
+				"bookmark": [{ id: 432534, time: 65876586 }]
+			},
+			{
+				"id": 65432445,
+				"title": "The Chamber",
+				"boxart": "http://cdn-0.nflximg.com/images/2891/TheChamber.jpg",
+				"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+				"rating": 4.0,
+				"bookmark": []
+			},
+			{
+				"id": 675465,
+				"title": "Fracture",
+				"boxart": "http://cdn-0.nflximg.com/images/2891/Fracture.jpg",
+				"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+				"rating": 5.0,
+				"bookmark": [{ id: 432534, time: 65876586 }]
+			}
+		];
+
+	return newReleases.
+		filter(function(video) {
+			return video.rating === 5.0;
+		}).
+		map(function(video) {
+			return video.id;
+		});
+}
+
+
+
+
+function() {
+	var movieLists = [
+			{
+				name: "New Releases",
+				videos: [
+					{
+						"id": 70111470,
+						"title": "Die Hard",
+						"boxart": "http://cdn-0.nflximg.com/images/2891/DieHard.jpg",
+						"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+						"rating": 4.0,
+						"bookmark": []
+					},
+					{
+						"id": 654356453,
+						"title": "Bad Boys",
+						"boxart": "http://cdn-0.nflximg.com/images/2891/BadBoys.jpg",
+						"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+						"rating": 5.0,
+						"bookmark": [{ id: 432534, time: 65876586 }]
+					}
+				]
+			},
+			{
+				name: "Dramas",
+				videos: [
+					{
+						"id": 65432445,
+						"title": "The Chamber",
+						"boxart": "http://cdn-0.nflximg.com/images/2891/TheChamber.jpg",
+						"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+						"rating": 4.0,
+						"bookmark": []
+					},
+					{
+						"id": 675465,
+						"title": "Fracture",
+						"boxart": "http://cdn-0.nflximg.com/images/2891/Fracture.jpg",
+						"uri": "http://api.netflix.com/catalog/titles/movies/70111470",
+						"rating": 5.0,
+						"bookmark": [{ id: 432534, time: 65876586 }]
+					}
+				]
+			}
+		],
+		allVideoIdsInMovieLists = [];
+
+	movieLists.forEach(function(movieList) {
+		movieList.videos.forEach(function(video) {
+			allVideoIdsInMovieLists.push(video.id);
+		});
+	});
+
+	return allVideoIdsInMovieLists;
+
+}
+
+
+
+The concatAll() function iterates over each sub-array in the array and collects the results in a new, flat array. Notice that the concatAll() function expects each item in the array to be another array.
+
+
+concatAll()函数遍历数组中的每一个子数组，将结果存放在一个新的、扁平的数组中。注意，concatAll()函数认为每个元素都是一个数组。
+
+Array.prototype.concatAll = function() {
+	var results = [];
+	this.forEach(function(subArray) {
+		results.push.apply(results, subArray);
+	});
+
+	return results;
+};
+
+// JSON.stringify([ [1,2,3], [4,5,6], [7,8,9] ].concatAll()) === "[1,2,3,4,5,6,7,8,9]"
+// [1,2,3].concatAll(); // throws an error because this is a one-dimensional array
+
+
+区分apply,call就一句话,
+foo.call(this, arg1,arg2,arg3) == foo.apply(this, arguments)==this.foo(arg1, arg2, arg3)
+
